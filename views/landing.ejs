@@ -1,0 +1,144 @@
+<%- include('../partials/header')%>
+       <div class="container">
+           <div  style="border-radius: 10px;box-shadow:2px 2px 15px 0 rgba(46,61,73,.4)" class="jumbotron main">
+           <div class="row">
+        <div class="col-lg-6">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSGlQXWqbQZJOfxE7MtMvIs9--VPgCp-dHPGA&usqp=CAU" style="width: 26%;
+border-radius: 50%;margin-left: 5%;">
+ <div style="margin-top: 5%;margin-left: 5%;">
+        <div> Username:<%=user.username%>
+            <%if(user.friends.length>2){%>
+            <img  style="width: 4%;border-radius: 50%;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSOyqOUq7Y9b090ePM_V85uBVKtcPmOfVJXtQ&usqp=CAU">
+            <%}%>
+         <div>First Name:<%=user.fname%></div>
+        <div> Last Name:<%=user.lname%></div>
+         <div>Email:<%=user.email%></div>
+         <div>Total Friends:<%=user.friends.length%></div>
+    </div>
+    </div>
+    </div>
+        <div class="col-lg-6">
+            New Post:
+       <form method="POST" action="/newpost/<%=user._id%>"  enctype="multipart/form-data">
+           <textarea rows="10" cols="30" style="resize: none;" name="text" class="col-sm-8">Write</textarea>
+           <input type="file" name="image" accept="image/*" required>
+           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-image" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9c0 .013 0 .027.002.04V12l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094L15 9.499V3.5a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm4.502 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+          </svg>
+           <br><button class="btn btn-primary">Post</button>
+       </form>
+    </div>
+</div>
+</div>
+    </div>
+    <div class="container abc" style="display: none;">
+    <div class="row">
+       <% users.forEach(function(use){%>
+        <%var x=0%>
+           <%user.friends.forEach(function(friend){%>
+              <%if(use._id.equals(friend._id)){%>
+                   <%x=1%>
+              <%}%>
+          <% })%>
+           <%if(x==0 && !use._id.equals(user._id)){%>
+            <div class="col-lg-6">
+                <div  style="border-radius: 10px;box-shadow:2px 2px 15px 0 rgba(46,61,73,.4)" class="jumbotron card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSGlQXWqbQZJOfxE7MtMvIs9--VPgCp-dHPGA&usqp=CAU" style="width: 5%;
+border-radius: 50%;margin-left: 5%;">
+               <%var y=0,z%>
+              <%use.notification.forEach(function(noti){%>
+                  <%if(noti.user.equals(user._id)){%>
+                       <%y=1%>
+                       <%z=noti._id%>
+                 <% }%>
+              <%})%>
+                <%if(y==1){%>
+                    <div><%=use.username%><a class="btn btn-warning btn-sm" style="float:right;" href="/removerequest/<%=z%>/<%=use._id%>">Remove request</a></div>
+                <%}else{%>
+           <div><%=use.username%><a class="btn btn-primary btn-sm" style="float:right;" href="/addfriend/<%=use._id%>">Add Friend</a></div>
+        <%}%>
+        </div>
+    </div>
+           <%}%>
+       <%})%>
+    </div>
+</div>
+       <%user.friends.forEach(function(friend){%>
+          <% posts.forEach(function(post){%>
+               <%if(post.user._id.equals(friend._id)){%>
+                    <div style="margin:auto;" class="col-lg-6 col-sm-12">
+                        <div  style="border-radius: 10px;box-shadow:2px 2px 15px 0 rgba(46,61,73,.4);width: 100%;" class="jumbotron container">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSGlQXWqbQZJOfxE7MtMvIs9--VPgCp-dHPGA&usqp=CAU" style="width: 5%;
+        border-radius: 50%;">
+                    <div><strong><%=post.user.username%></strong>posted
+                        <img style="width:100%;height: 300px;" class="img-thumbnail" src="<%=post.image.url%>">
+                        <br><br>
+                            <%=post.text%>
+                            <span style="float: right; margin-right: 10px;color:blueviolet"><%=moment(post.date).fromNow()%></span>
+                        </div>
+                        <br>
+                    <div class="comments" style="display: none;">
+                        Comments:
+                        <%post.comments.forEach(function(comment){%>
+                            <div class="c" style="margin-top: 17px;padding: 17px;">
+                            <strong><%=comment.author%></strong> :<%=comment.text%>
+                                <%if(comment.user._id.equals(cuser._id)){%>
+                                <a href="/deletecomment/<%=comment._id%>/landingpage"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                              </svg></a>
+                              <%}%>
+                            <span style="color:blueviolet"><%=moment(comment.date).fromNow()%></span>
+                    </div>
+                     <%})%>
+                            </div>
+                            <br>
+                            <div class="d-flex justify-content-around">
+                                <button class="btn btn-outline-primary comm btn-sm"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-left-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path fill-rule="evenodd" d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                  </svg></button>
+                                <form action="/like/<%=post._id%>/landingpage" method="POST">
+                                    <%var x=0%>
+                                    <%post.likes.forEach(function(like){%>
+                                           <%if(like._id.equals(user._id)){%>
+                                                  <%x=1%>
+                                           <%}%>
+                                   <% })%>
+                                   <%if(x==0){%>
+                                    <button style="border: white;" class="btn btn-outline-danger"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                      </svg></button>
+                                   <%} else {%>
+                                    <button style="border: white;" class="btn btn-outline-danger"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                      </svg></button>
+                                    <%}%></form>
+                                </div>
+                                <br>
+                                <div class="d-flex justify-content-around">
+                                <form style="float:left" class="form-inline" method="POST" action="/comment/<%=post._id%>/landingpage">
+                                    <div class="d-flex">
+                                    <input class="form-control" type="text" name="comment"><button class="btn btn-primary"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-left-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                        <path fill-rule="evenodd" d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                      </svg></button>
+                                    </div>
+                                </form>
+                                <a href="/likes/<%=post.id%>" class="btn btn-primary btn-sm">Likes</a>
+                                </div>
+                </div>
+            </div>
+               <%}%>
+           <%})%>
+       <%})%>
+        </div>
+<script>
+    $(".but").click(function(){
+    $(".abc").toggle();
+    })
+    $(".comm").click(function(){
+    $(".comments").toggle()
+    })
+</script>
+<%- include('../partials/footer')%>

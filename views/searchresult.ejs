@@ -1,0 +1,31 @@
+<%-include('../partials/header')%>
+<div class="container">
+    <%if(a==0){%>
+    <h3>No User Found with Username as <strong><%=suser%></strong></h3>
+    <%}else{%>
+        <h3>User Found with Username as <strong><%=suser%></strong></h3> 
+    <div class="row">
+<%users.forEach(function(user){%>
+    <div class="col-lg-6">
+        <div style="border-radius: 10px;box-shadow:2px 2px 15px 0 rgba(46,61,73,.4)" class="jumbotron card">
+<div>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSGlQXWqbQZJOfxE7MtMvIs9--VPgCp-dHPGA&usqp=CAU" style=" float:right; width: 29%;
+border-radius: 50%;margin-right: 12%;">
+  <div> Username:<%=user.username%></div>
+  <div>First Name:<%=user.fname%></div>
+ <div> Last Name:<%=user.lname%></div>
+  <div>Email:<%=user.email%></div>
+  <%if(!user._id.equals(cuser._id) && cuser.friends.indexOf(user._id)!=-1){%>
+    <a class="btn btn-outline-danger" href="/delete/<%=user._id%>">Unfriend</a>
+    <%}else if(user._id.equals(cuser._id)){%>
+        <strong><button class="btn btn-success">You</button></strong>
+        <%}else{%>
+            <a class="btn btn-warning" href="/addfriend/<%=user._id%>">Add Friend</a>
+            <%}%>
+</div>
+</div>
+</div>
+<%})%>
+<%}%>
+</div>
+<%-include('../partials/footer')%>

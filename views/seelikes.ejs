@@ -1,0 +1,19 @@
+<%-include('../partials/header')%>
+<div class="container">
+<div class="row">
+<%post.likes.forEach(function(like){%>
+    <div class="col-lg-6">
+        <div class="jumbotron card" style="border-radius: 10px;box-shadow:2px 2px 15px 0 rgba(46,61,73,.4)"">
+<div>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSGlQXWqbQZJOfxE7MtMvIs9--VPgCp-dHPGA&usqp=CAU" style="width: 19%;
+border-radius: 50%;">
+  <div style="margin: auto;"> Username:<%=like.username%> <%if(like.friends.length>2){%>
+    <img  style="width: 4%;border-radius: 50%;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSOyqOUq7Y9b090ePM_V85uBVKtcPmOfVJXtQ&usqp=CAU">
+    <%}%></div>
+</div>
+</div>
+</div>
+<%})%>
+</div>
+</div>
+<%-include('../partials/footer')%>

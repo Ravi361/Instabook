@@ -1,0 +1,24 @@
+<%-include('../partials/header')%>
+<div class="container">
+<div class="row">
+<%user.friends.forEach(function(friend){%>
+    <div class="col-lg-6">
+        <div class="jumbotron" style="border-radius: 10px;box-shadow:2px 2px 15px 0 rgba(46,61,73,.4)">
+<div>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSGlQXWqbQZJOfxE7MtMvIs9--VPgCp-dHPGA&usqp=CAU" style=" float:right; width: 29%;
+border-radius: 50%;margin-right: 12%;">
+  <div> Username:<%=friend.username%> <%if(friend.friends.length>2){%>
+    <img  style="width: 4%;border-radius: 50%;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSOyqOUq7Y9b090ePM_V85uBVKtcPmOfVJXtQ&usqp=CAU">
+    <%}%></div>
+  <div>First Name:<%=friend.fname%></div>
+ <div> Last Name:<%=friend.lname%></div>
+  <div>Email:<%=friend.email%></div>
+  <div>Total Friends:<%=friend.friends.length%></div>
+  <a class="btn btn-outline-danger" href="/delete/<%=friend._id%>">Unfriend</a>
+</div>
+</div>
+</div>
+<%})%>
+</div>
+</div>
+<%-include('../partials/footer')%>
